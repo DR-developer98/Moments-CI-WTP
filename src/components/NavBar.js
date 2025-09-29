@@ -2,45 +2,47 @@ import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import styles from "../styles/NavBar.module.css";
-import { Navlink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-function NavBar() {
+const NavBar = () => {
   return (
-    <Navbar classNae={styles.NavBar} expand="md" fixed="top">
+    <Navbar className={styles.NavBar} expand="md" fixed="top">
       <Container>
-        <Navlink to="/">
-          <Navbar.Brand src={logo} alt="logo" height="45">
-            React-Bootstrap
+        <NavLink to="/">
+          <Navbar.Brand>
+            <img src={logo} alt="logo" height="45" />
           </Navbar.Brand>
-        </Navlink>
+        </NavLink>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Navlink
+          <Nav className="ml-auto text-left">
+            <NavLink
               exact
               className={styles.NavLink}
               activeClassName={styles.Active}
               to="/"
             >
               <i className="fas fa-home"></i>Home
-            </Navlink>
-            <Navlink
+            </NavLink>
+            <NavLink
               className={styles.NavLink}
               activeClassName={styles.Active}
               to="/signin"
             >
               <i className="fas fa-sign-in-alt"></i>Sign in
-            </Navlink>
-            <Navlink
+            </NavLink>
+            <NavLink
               to="/signup"
               className={styles.NavLink}
               activeClassName={styles.Active}
             >
               <i className="fas fa-user-plus"></i>Sign up
-            </Navlink>
+            </NavLink>
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
-}
+};
 
 export default NavBar;
