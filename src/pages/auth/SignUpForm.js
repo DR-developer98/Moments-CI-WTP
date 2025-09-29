@@ -13,7 +13,6 @@ import {
   Container,
   Alert,
 } from "react-bootstrap";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 const SignUpForm = () => {
   // Ter herinneringç met de hook useState
