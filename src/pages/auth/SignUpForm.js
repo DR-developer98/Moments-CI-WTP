@@ -20,7 +20,7 @@ const SignUpForm = () => {
   // bepalen we de default waarde van - in dit geval - signUpData
   // De default waarde is gelijk aan een object met drie keys,
   // alle met als waarde een lege string.
-  const { signUpData, setSignUpData } = useState({
+  const [signUpData, setSignUpData] = useState({
     username: "",
     password1: "",
     password2: "",
@@ -31,7 +31,7 @@ const SignUpForm = () => {
   const { username, password1, password2 } = signUpData;
   // ↓↓↓ We slaan alle errors op in een object en gebruikern de useState hook
   // om de waarde van het errors-object op leeg {} te zetten
-  const { errors, setErrors } = useState({});
+  const [errors, setErrors] = useState({});
   // ↓↓↓ useHistory is een hook. Het geeft je toegang tot het history-object.
   // Het history-object stelt je in staat om naar een andere pagina te navigeren,
   // terug te gaan naar de vorige pagina, de browsergeschiedenigs beheren
@@ -75,6 +75,7 @@ const SignUpForm = () => {
             <Form.Group controlId="username">
               <Form.Label className="d-none">username</Form.Label>
               <Form.Control
+                className={styles.Input}
                 type="text"
                 placeholder="username"
                 name="username"
