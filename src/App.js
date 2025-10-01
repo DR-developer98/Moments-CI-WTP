@@ -9,6 +9,8 @@ import SignInForm from "./pages/auth/SignInForm";
 // 7a. zie Route PostCreateForm beneden
 // voor stap 7b. sie Asset.js
 import PostCreateForm from "./pages/posts/PostCreateForm";
+// 9. PostPage; zie Desbetreffende Route; voor 9a. zie PostPage.js
+import PostPage from "./pages/posts/PostPage";
 // import { createContext, useEffect, useState } from "react";
 // import axios from 'axios';
 
@@ -50,20 +52,26 @@ function App() {
   return (
     // 3b. Deze providers geven alle child-elementen toegang
     // tot currentUser en setCurrentUser() ---> deze zijn nu
-    // props geworden, die in de afzonderlijke componenten 
+    // props geworden, die in de afzonderlijke componenten
     // kunnen worden gebruikt ---> verplaatst naar contexts > CurrentUserContext.js
-      <div className={styles.App}>
-        <NavBar />
-        <Container className={styles.Main}>
-          <Switch>
-            <Route exact path="/" render={() => <h1>Home page</h1>} />
-            <Route exact path="/signin" render={() => <SignInForm />} />
-            <Route exact path="/signup" render={() => <SignUpForm />} />
-            <Route exact path="/posts/create" render={() => <PostCreateForm />} />
-            <Route render={() => <p>Page not found!</p>} />
-          </Switch>
-        </Container>
-      </div>
+    <div className={styles.App}>
+      <NavBar />
+      <Container className={styles.Main}>
+        <Switch>
+          <Route exact path="/" render={() => <h1>Home page</h1>} />
+          <Route exact path="/signin" render={() => <SignInForm />} />
+          <Route exact path="/signup" render={() => <SignUpForm />} />
+          <Route exact path="/posts/create" render={() => <PostCreateForm />} />
+          <Route
+            exact
+            // 9.. :id betekent dat "id" een parameter is, die via de url doorgegeven kan worden
+            path="/posts/:id"
+            render={() => <PostPage />}
+          />
+          <Route render={() => <p>Page not found!</p>} />
+        </Switch>
+      </Container>
+    </div>
   );
 }
 
