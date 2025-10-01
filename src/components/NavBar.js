@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import styles from "../styles/NavBar.module.css";
@@ -9,6 +9,7 @@ import {
   useSetCurrentUser,
 } from "../contexts/CurrentUserContext";
 import Avatar from "./Avatar";
+import useClickOutsideToggle from "../hooks/useClickOutsideToggle";
 
 const NavBar = () => {
   // 3f. Zie App.js en SignInForm.js voor de vorige 3. stappen
@@ -18,6 +19,37 @@ const NavBar = () => {
   // 3j. We updaten bovenstaande currentUser variabel d.m.v. custom hooks (zie CurrentUserContext.js)
   const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
+  const {expanded, setExpanded, ref} = useClickOutsideToggle();
+
+  // 6. voor het inklappen van het menu, beginnen we hiermee
+  // met de expanded houden we bij of het burger-icoon-menu in- of uitgeklapt is
+  // useState(false) ===> menu is in begin ingeklapt
+  // voor 6a. ga naar het return statement beneden
+  // const [expanded, setExpanded] = useState(false);
+  // // 6c. we declareren nu een ref, die een referentie aan het burger-icoon vasthoudt.
+  // // we gebruiker hierbij een useRef hook
+  // // Voor stap 6d. kijk weer bij Nav.Toggle
+  // const ref = useRef(null);
+
+  // // 6e. 
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     // 6ea. hiermee checken we of de gebruiker weg heeft geklikt van de burger-knop
+  //     // indien ja, dan laten we het menu weer inklappen
+  //     if (ref.current && !ref.current.contains(event.target)){
+  //       setExpanded(false);
+  //     }
+  //   }
+
+  //   document.addEventListener('mouseup', handleClickOutside)
+  //   // 6eb. clearup functie; hoewel deze component niet unmounted wordt
+  //   // is het nog steeds good practice om alle event listeners weg te halen
+  //   return () => {
+  //     document.removeEventListener('mouseup', handleClickOutside)
+  //   }
+  // }, [ref])
+
+  // 5e. Signout handler
   const handleSignOut = async () => {
     try {
       await axios.post("dj-rest-auth/logout/");
@@ -97,7 +129,20 @@ const NavBar = () => {
     </>
   );
   return (
-    <Navbar className={styles.NavBar} expand="md" fixed="top">
+    // 6a. door expanded={expanded} laten we de weten dat we het menu graag ingeklapt willen
+    // 6b. bij Navbar.Toggle ==> onClick={() => setExpanded(!expanded)}
+    // we willen dus dat bij het klikken expanded van false naar true en omgekeerd gaat
+    // Voor stap 6c. kijk weer boven onder [expanded, setExpanded] ↑ 
+
+    // 6d. ref={ref} bij Navbar.Toggle ===> hiermee kunnen we aan dit DOM-element refereren
+    // en bijhouden of de gebruiker erin geklikt heeft
+    // voor Stap 6e. kijk weer boven onder const ref=useRef(null)
+    <Navbar
+      expanded={expanded}
+      className={styles.NavBar}
+      expand="md"
+      fixed="top"
+    >
       <Container>
         <NavLink to="/">
           <Navbar.Brand>
@@ -105,7 +150,11 @@ const NavBar = () => {
           </Navbar.Brand>
         </NavLink>
         {currentUser && addPostIcon}
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle
+          ref={ref}
+          onClick={() => setExpanded(!expanded)}
+          aria-controls="basic-navbar-nav"
+        />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
             <NavLink
