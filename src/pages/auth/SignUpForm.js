@@ -34,7 +34,7 @@ const SignUpForm = () => {
   const [errors, setErrors] = useState({});
   // ↓↓↓ useHistory is een hook. Het geeft je toegang tot het history-object.
   // Het history-object stelt je in staat om naar een andere pagina te navigeren,
-  // terug te gaan naar de vorige pagina, de browsergeschiedenigs beheren
+  // terug te gaan naar de vorige pagina, de browsergeschiedenis beheren en meer.
   const history = useHistory();
   const handleChange = (event) => {
     setSignUpData({
