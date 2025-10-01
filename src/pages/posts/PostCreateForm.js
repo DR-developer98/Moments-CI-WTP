@@ -1,7 +1,7 @@
 // 1-10-2025
 // 7. Voor de eerste stap (route creëren) ga naar App.js
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -18,6 +18,8 @@ import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import { FormFile } from "react-bootstrap";
+import Image from "react-bootstrap/Image";
+import { useHistory } from "react-router";
 
 function PostCreateForm() {
   const [errors, setErrors] = useState({});
@@ -28,6 +30,17 @@ function PostCreateForm() {
     content: "",
     image: "",
   });
+
+  // 8. Deze stappen zijn nodig om de ingeladen image naar onze API toe te sturen
+  // Hiervoor benodigen we een de useRef hook. Ter herinnering: deze creëert een referentie
+  // aan een Component
+  // 8a. De waarde is bij default op null gezet, zodat we wijzigingen daarop kunnen bijhouden
+  // voor stap 8b. ga naar FormFile ↓
+  const imageInput = useRef(null);
+
+  // 8c. history hook, waarmee we straks de gebruker kunnen redirecten
+  // voor stap 8d. scroll naar beneden naar onder handleChangeImage
+  const history = useHistory();
 
   // 7f. functie om Change te handelen
   const handleChange = (event) => {
@@ -56,6 +69,31 @@ function PostCreateForm() {
     }
   };
 
+  // 8d. neemt submission formulier in behandeling
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    // 8e. formData creëert een nieuw formData-object;
+    // 8f. .append('keyname', newvalue)
+    // Appends a new value onto an existing key inside a FormData object,
+    // or adds the key if it does not already exist.
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("image", imageInput.current.files[0]);
+
+    // 8g. gewoon kopiëren en bron vermelden in jouw project
+    // voor stap 8h. scroll naar beneden naar Form aan het begin van return statement
+    try {
+      const { data } = await axiosReq.post("/posts/", formData);
+      history.push(`/posts/${data.id}`);
+    } catch (err) {
+      console.log(err);
+      if (err.response?.status !== 401) {
+        setErrors(err.response?.data);
+      }
+    }
+  };
+
   const { title, content, image } = postData;
 
   const textFields = (
@@ -71,6 +109,11 @@ function PostCreateForm() {
           onChange={handleChange}
         />
       </Form.Group>
+      {errors?.title?.map((message, idx) => (
+        <Alert key={idx} variant="warning">
+          {message}
+        </Alert>
+      ))}
       <Form.Group>
         <Form.Label>Content</Form.Label>
         <Form.Control
@@ -84,10 +127,16 @@ function PostCreateForm() {
           onChange={handleChange}
         />
       </Form.Group>
-
+      {errors?.content?.map((message, idx) => (
+        <Alert key={idx} variant="warning">
+          {message}
+        </Alert>
+      ))}
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
-        onClick={() => {}}
+        // 8i. history.goBack() stuurt de gebruiker terug naar
+        // de vorige pagina in zijn Browsergeschiedenis
+        onClick={() => history.goBack()}
       >
         cancel
       </Button>
@@ -98,7 +147,11 @@ function PostCreateForm() {
   );
 
   return (
-    <Form>
+    <Form
+      // 8h. we voegen de event handler
+      // voor stap 8i. ga naar de Cancel button
+      onSubmit={handleSubmit}
+    >
       <Row>
         <Col className="py-2 p-0 p-md-2" md={7} lg={8}>
           <Container
@@ -121,8 +174,8 @@ function PostCreateForm() {
                     </figure>
                     <div>
                       <Form.Label
-                      // 7lb. htmlFor="image-upload" zorgt ervoor dat de functie in FormFile weer wordt aangeroepen
-                      // Met die css-styleregels komt dit label er als een button uit te zien
+                        // 7lb. htmlFor="image-upload" zorgt ervoor dat de functie in FormFile weer wordt aangeroepen
+                        // Met die css-styleregels komt dit label er als een button uit te zien
                         className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
                         htmlFor="image-upload"
                       >
@@ -155,8 +208,17 @@ function PostCreateForm() {
                 // 7k. nu kunnen we de onChange prop toevoegen
                 // Voor stap 7l. ga naar boven de Form.Label "image-upload"
                 onChange={handleChangeImage}
+                // 8b. We wijzen de FormFile de ref toe
+                // voor stap 8c.
+                // (history hook, om gebruikers weer door te sturen) scroll weer naar boven ↑
+                ref={imageInput}
               />
             </Form.Group>
+            {errors?.image?.map((message, idx) => (
+              <Alert key={idx} variant="warning">
+                {message}
+              </Alert>
+            ))}
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
