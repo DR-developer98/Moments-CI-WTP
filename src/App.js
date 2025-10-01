@@ -6,6 +6,9 @@ import { Route, Switch } from "react-router-dom";
 import "./api/axiosDefault";
 import SignUpForm from "./pages/auth/SignUpForm";
 import SignInForm from "./pages/auth/SignInForm";
+// 7a. zie Route PostCreateForm beneden
+// voor stap 7b. sie Asset.js
+import PostCreateForm from "./pages/posts/PostCreateForm";
 // import { createContext, useEffect, useState } from "react";
 // import axios from 'axios';
 
@@ -56,6 +59,7 @@ function App() {
             <Route exact path="/" render={() => <h1>Home page</h1>} />
             <Route exact path="/signin" render={() => <SignInForm />} />
             <Route exact path="/signup" render={() => <SignUpForm />} />
+            <Route exact path="/posts/create" render={() => <PostCreateForm />} />
             <Route render={() => <p>Page not found!</p>} />
           </Switch>
         </Container>

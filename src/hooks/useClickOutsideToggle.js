@@ -19,6 +19,7 @@ const useClickOutsideToggle = () => {
   }, [ref]);
 
   // 6g. i.p.v. een <div> retourneren we hier de variabelen die we in NavBar.js nodig hebben
+  // Voor stap 6h. zie NavBar.js
   return {expanded, setExpanded, ref}
 };
 

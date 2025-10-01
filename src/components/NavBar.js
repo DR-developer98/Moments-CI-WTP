@@ -19,6 +19,7 @@ const NavBar = () => {
   // 3j. We updaten bovenstaande currentUser variabel d.m.v. custom hooks (zie CurrentUserContext.js)
   const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
+  // 6h. hier destructureren we useClickOutsideToggle, zodat die variabelen weer beschikbaar worden 
   const {expanded, setExpanded, ref} = useClickOutsideToggle();
 
   // 6. voor het inklappen van het menu, beginnen we hiermee
@@ -27,7 +28,7 @@ const NavBar = () => {
   // voor 6a. ga naar het return statement beneden
   // const [expanded, setExpanded] = useState(false);
   // // 6c. we declareren nu een ref, die een referentie aan het burger-icoon vasthoudt.
-  // // we gebruiker hierbij een useRef hook
+  // // we gebruiken hierbij een useRef hook
   // // Voor stap 6d. kijk weer bij Nav.Toggle
   // const ref = useRef(null);
 
@@ -35,7 +36,7 @@ const NavBar = () => {
   // useEffect(() => {
   //   const handleClickOutside = (event) => {
   //     // 6ea. hiermee checken we of de gebruiker weg heeft geklikt van de burger-knop
-  //     // indien ja, dan laten we het menu weer inklappen
+  //     // zo ja, dan laten we het menu weer inklappen
   //     if (ref.current && !ref.current.contains(event.target)){
   //       setExpanded(false);
   //     }
@@ -48,6 +49,7 @@ const NavBar = () => {
   //     document.removeEventListener('mouseup', handleClickOutside)
   //   }
   // }, [ref])
+  // Voor stap 6f. en 6g. kijk in useClickOutsideToggle.js
 
   // 5e. Signout handler
   const handleSignOut = async () => {
