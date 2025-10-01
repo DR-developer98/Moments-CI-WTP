@@ -1,0 +1,8 @@
+.Avatar {
+  border-radius: 50%;
+  margin: 0px 8px 0px 8px;
+  /*5b. ↓↓↓ heel belangrijk: dit zorgt ervoor dat de profiel-afbeelding altijd in de container past*/ 
+  object-fit: cover;
+}
+
+/*Voor stap 5c. zie components > Avatar.js*/
