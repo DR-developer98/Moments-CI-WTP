@@ -5,6 +5,7 @@ import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media } from "react-bootstrap";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import Avatar from "../../components/Avatar";
+import { axiosRes } from "../../api/axiosDefault";
 
 const Post = (props) => {
   // 10b. Hier destructureren we de props (...post.results[0])
@@ -25,11 +26,56 @@ const Post = (props) => {
     // postPage is een Truthy-waarde
     // voor stap 10h. kijk in 8. Notities
     postPage,
+    // 11b. setPosts (prop in de <Post/> uit PostPage.js)
+    // hebben we nodig om de post te updaten.
+    // voor stap 11c. kijk in de handleLike-functie
+    setPosts,
   } = props;
 
   // 10c. De ingelogde gebruiker kan niet zijn eigen posts liken
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
+
+  // 11. handleLike event handler | LIKE
+  const handleLike = async () => {
+    try {
+      // 11a. Response Interceptor ==> axiosRes.post("likes/", {post: id})
+      // Hiermee proberen we de post: id naar het /likes/-api-eindpunt te posten.
+      // Zodoende weet de API welke post we proberen te liken
+      const { data } = await axiosRes.post("/likes/", { post: id });
+      // 11c. prevPosts ==> de vorige staat van "posts"
+      setPosts((prevPosts) => ({
+        ...prevPosts,
+        results: prevPosts.results.map((post) => {
+          return post.id === id
+            ? // 11d. indien de id van de post die we willen lijken met de id van de post in kwestie
+              // correspondeert, dan wordt de gehele post geretourneerd met een met 1 verhoogd aantal likes
+              { ...post, likes_count: post.likes_count + 1, like_id: data.id }
+            : // 11e. zo niet, dan retourneren we simpelweg de post en doen daar verder niets mee
+              post;
+        }),
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 11f. UNLIKE event handler
+  const handleUnlike = async (event) => {
+    try {
+      const { data } = await axiosRes.delete(`/likes/${like_id}/`);
+      setPosts((prevPosts) => ({
+        ...prevPosts,
+        results: prevPosts.results.map((post) => {
+          return post.id === id
+            ? { ...post, likes_count: post.likes_count - 1, like_id: null }
+            : post;
+        }),
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Card className={styles.Post}>
@@ -69,11 +115,15 @@ const Post = (props) => {
               <i className="far fa-heart" />
             </OverlayTrigger>
           ) : like_id ? (
-            <span onClick={() => {}}>
+            <span onClick={() => {handleUnlike}}>
               <i className={`fas fa-heart ${styles.Heart}`} />
             </span>
           ) : currentUser ? (
-            <span onClick={() => {}}>
+            <span
+              onClick={() => {
+                handleLike;
+              }}
+            >
               <i className={`far fa-heart ${styles.HeartOutline}`} />
             </span>
           ) : (
