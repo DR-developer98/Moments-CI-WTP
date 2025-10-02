@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 export const CurrentUserContext = createContext();
 export const SetCurrentUserContext = createContext();
 
-//3i. Deze custom hooks hebben we aangemaakt, zodat we niet altijd de useContext
+// 3i. Deze custom hooks hebben we aangemaakt, zodat we niet altijd de useContext
 // en de Context-objecten hoeven te importeren.
 export const useCurrentUser = () => useContext(CurrentUserContext);
 export const useSetCurrentUser = () => useContext(SetCurrentUserContext);

@@ -64,7 +64,7 @@ function App() {
           <Route exact path="/posts/create" render={() => <PostCreateForm />} />
           <Route
             exact
-            // 9.. :id betekent dat "id" een parameter is, die via de url doorgegeven kan worden
+            // 9. :id betekent dat "id" een parameter is, die via de url doorgegeven kan worden
             path="/posts/:id"
             render={() => <PostPage />}
           />

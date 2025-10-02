@@ -32,9 +32,9 @@ function PostCreateForm() {
   });
 
   // 8. Deze stappen zijn nodig om de ingeladen image naar onze API toe te sturen
-  // Hiervoor benodigen we een de useRef hook. Ter herinnering: deze creëert een referentie
+  // Hiervoor benodigen we een useRef hook. Ter herinnering: deze creëert een referentie
   // aan een Component
-  // 8a. De waarde is bij default op null gezet, zodat we wijzigingen daarop kunnen bijhouden
+  // 8a. De waarde is bij default op null gezet, zodat we wijzigingen daarop kunnen waarnemen en bijhouden
   // voor stap 8b. ga naar FormFile ↓
   const imageInput = useRef(null);
 
@@ -55,7 +55,7 @@ function PostCreateForm() {
     // 7j. we checken of de gebruiker een afbeelding heeft uitgekozen
     // door te kijken of er een bestand is in de bestand-array (zo ja, dan is de length groter dan 0)
     if (event.target.files.length) {
-      // 7jc. indien de gebruiker een andere afbeelding wilt uploaden na er al een ingeladen te hebben.
+      // 7jc. indien de gebruiker een andere afbeelding wil uploaden na er al een ingeladen te hebben,
       // moeten we die lokale link naar de vorige image intrekken (revoke)
       // voor stap 7k. ga terug naar Form.File
       URL.revokeObjectURL(image);
@@ -148,7 +148,7 @@ function PostCreateForm() {
 
   return (
     <Form
-      // 8h. we voegen de event handler
+      // 8h. we voegen de event handler toe
       // voor stap 8i. ga naar de Cancel button
       onSubmit={handleSubmit}
     >
