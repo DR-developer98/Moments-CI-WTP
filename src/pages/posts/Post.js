@@ -48,7 +48,7 @@ const Post = (props) => {
         ...prevPosts,
         results: prevPosts.results.map((post) => {
           return post.id === id
-            ? // 11d. indien de id van de post die we willen lijken met de id van de post in kwestie
+            ? // 11d. indien de id van de post die we willen liken met de id van de post in kwestie
               // correspondeert, dan wordt de gehele post geretourneerd met een met 1 verhoogd aantal likes
               { ...post, likes_count: post.likes_count + 1, like_id: data.id }
             : // 11e. zo niet, dan retourneren we simpelweg de post en doen daar verder niets mee
@@ -61,7 +61,7 @@ const Post = (props) => {
   };
 
   // 11f. UNLIKE event handler
-  const handleUnlike = async (event) => {
+  const handleUnlike = async () => {
     try {
       const { data } = await axiosRes.delete(`/likes/${like_id}/`);
       setPosts((prevPosts) => ({

@@ -11,6 +11,8 @@ import SignInForm from "./pages/auth/SignInForm";
 import PostCreateForm from "./pages/posts/PostCreateForm";
 // 9. PostPage; zie Desbetreffende Route; voor 9a. zie PostPage.js
 import PostPage from "./pages/posts/PostPage";
+import PostsPage from "./pages/posts/PostsPage";
+import { useCurrentUser } from "./contexts/CurrentUserContext";
 // import { createContext, useEffect, useState } from "react";
 // import axios from 'axios';
 
@@ -20,6 +22,14 @@ import PostPage from "./pages/posts/PostPage";
 // export const SetCurrentUserContext = createContext();
 
 function App() {
+  // 12a. We willen weten wie de huidige gebruiker is, zodat we de door hem gelikete posts kunnen weergeven
+  const currentUser = useCurrentUser();
+  // 12b. We hebben uiteraard ook zijn profile_id nodig. Deze is gelijk aan de profile_id van de currentUser
+  // indien deze gedefinieerd is (vanwaar het vraagteken achter --> currentUser?)
+  // Indien de gebruikersdetails nog worden opgehaald, zal de profile_id gelijk worden gezet op een lege string.
+  // voor stap 12c. kijk bij Routes
+  const profile_id = currentUser?.profile_id || "";
+
   // 01-10-2025 les over de weergave van navlinks a.d.h.v. inlogstatus
   // Versturen request aan onze API om na te gaan wie de ingelogde gebruiker is
   // 1. GET request aan dj-rest-auth/user/url
@@ -58,7 +68,40 @@ function App() {
       <NavBar />
       <Container className={styles.Main}>
         <Switch>
-          <Route exact path="/" render={() => <h1>Home page</h1>} />
+          {/* <Route exact path="/" render={() => <h1>Home page</h1>} /> */}
+          <Route
+            // 12. We vervangen bovenstaande uitgecommentarieerde Home page door <PostsPage/>
+            // voor stap 12a. kijk net onder App()
+            exact
+            path="/"
+            render={() => (
+              <PostsPage message="No results found. Adjust the search keyword" />
+            )}
+          />
+          <Route
+            // 12c. Route voor de feed (posts van gevolgde profielen)
+            exact
+            path="/feed"
+            render={() => (
+              <PostsPage
+                message="No resulsts found. Adjust the search keyword or follow a profile"
+                // 12d. filter voor de gevolgde profielen (kijk 21. Notities in 2. API)
+                filter={`owner__followed__owner__profile=${profile_id}&`}
+              />
+            )}
+          />
+          <Route
+            // 12e. Route voor de gelikete posts met het filter
+            // voor stap 13. kijk weer in PostsPage.js
+            exact
+            path="/feed"
+            render={() => (
+              <PostsPage
+                message="No resulsts found. Adjust the search keyword or like a post"
+                filter={`likes__owner__profile=${profile_id}&ordering=-likes__created_at&`}
+              />
+            )}
+          />
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/posts/create" render={() => <PostCreateForm />} />
