@@ -102,7 +102,7 @@ function PostPage() {
               // 18d. we spreiden het comment-object uit d.m.v. {...comment}
               // zodat zijn content als props doorgegeven wordt
               // voor stap 18e. kijk in Comment.js
-              <Comment key={comment.id} {...comment}/>
+              <Comment key={comment.id} {...comment} setPost={setPost} setComments={setComments}/>
             })
           ) : currentUser ? ( // NEE! Is de gebruiker ingelogd? // // JA! Dan geef onderstaande melding weer
             <span>No comments yet, be the first to comment!</span>
