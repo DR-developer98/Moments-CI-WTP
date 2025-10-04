@@ -12,7 +12,7 @@ import Post from "./Post";
 function PostPage() {
   // 9a. We gaan nu de gegevens van de beoogde post ophalen
   // a.d.h.v. de id die in de url voorkomt (ter herinnering: /posts/:id ===> de id van de post kan door de url worden weergegeven)
-  const { id } = useParams;
+  const { id } = useParams();
   // 9b. We gaan zometeen een request doen aan de API voor één enkele post.
   // Wanneer we om één post vragen, krijgen we ook één post-object terug.
   // Als we echter meerdere posts opvragen, dan krijgen we een array van objecten.
