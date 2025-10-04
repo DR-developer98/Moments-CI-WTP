@@ -11,6 +11,7 @@ import Post from "./Post";
 
 import CommentCreateForm from "../comments/CommentCreateForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import Comment from "../comments/Comment";
 
 function PostPage() {
   // 9a. We gaan nu de gegevens van de beoogde post ophalen
@@ -34,7 +35,10 @@ function PostPage() {
         // stelt ons in staat om een variabel een betenisvollere naam te geven.
         // Wij halen een generieke "data" op, maar het heeft voor ons meer betekenis
         // met de naam "post"
-        const [{ data: post }] = await Promise.all([
+
+        // 18a. {data: comments} ---> we deconstructureren de data en geven we hem 
+        // de betekenisvollere naam "comments". Voor stap 18b. kijk onder setPost
+        const [{ data: post }, {data: comments}] = await Promise.all([
           // 9d. een Promise is de "belofte" van een waarde/result-object.
           // Alle promises moeten "resolved" worden, d.w.z. waarkomen.
           // Indien deze waarkomen/nagekomen worden, dan gebruiken we de
@@ -44,10 +48,15 @@ function PostPage() {
           // die de inlogstatus van de gebruiker nodig heeft voor zijn uitvoering en ververst
           // de Access Token van de gebruiker
           axiosReq.get(`/posts/${id}`),
+          // 18. Request voor het ophalen van de comments
+          // voor stap 18a. zie hierboven const [...] = await Promis [...]
+          axiosReq.get(`/comments/?post=${id}`)
         ]);
         // 9da. D.m.v. de setPost functie zetten we post op {results: [post]}
         setPost({ results: [post] });
-        console.log(post);
+        // 18b. Zet comments op "comments" d.m.v. setComments.
+        // Voor stap 18c. kijk beneden net boven </Container>
+        setComments(comments);
       } catch (err) {
         // 9db. Anders loggen we de foutmeldingen in de console
         console.log(err);
@@ -86,6 +95,21 @@ function PostPage() {
           ) : comments.results.length ? (
             "Comments"
           ) : null}
+
+          {// 18c. Zijn er comments?
+          comments.results.length ? ( // JA! Dan geef de comments weer
+            comments.results.map(comment => {
+              // 18d. we spreiden het comment-object uit d.m.v. {...comment}
+              // zodat zijn content als props doorgegeven wordt
+              // voor stap 18e. kijk in Comment.js
+              <Comment key={comment.id} {...comment}/>
+            })
+          ) : currentUser ? ( // NEE! Is de gebruiker ingelogd? // // JA! Dan geef onderstaande melding weer
+            <span>No comments yet, be the first to comment!</span>
+          ) : ( // // NEE! Dan geef onderstaande melding weer
+            <span>No comments... yet!</span>
+          ) }
+
         </Container>
       </Col>
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
