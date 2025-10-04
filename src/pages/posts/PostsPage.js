@@ -107,7 +107,7 @@ function PostsPage({ message, filter = "" }) {
                     <Post
                       key={post.id}
                       // 13ic. met {...post} en setPosts={setPosts} zal de gebruiker
-                      // de posts liken en becommentariëren
+                      // de posts kunnen liken en becommentariëren
                       {...post}
                       setPosts={setPosts}
                     />;
@@ -118,17 +118,18 @@ function PostsPage({ message, filter = "" }) {
                   dataLength={posts.results.length}
                   loader={<Asset spinner />}
                   // 15ca. hasMore --> in onze API zien we dat de posts een "next"-key hebben, die
-                  // aangeeft of er volgende pagina's aan posts bestaan. Deze is of "true" of "false"
+                  // aangeeft of er volgende pagina's aan posts bestaan. Deze is of "true" of "false".
                   // Wanneer de laatste pagina is bereikt, dan staat ie gelijk aan false. 
                   // We gebruiken hierbij een double NOT operator !!posts.next
                   // De functie van de double NOT operator is om expliciete checks uit te voeren
-                  // of een zuivere Boolean-waarde teruggekoppeld te krijgen
+                  // of een zuivere Boolean-waarde terug te koppelen
                   hasMore={!!posts.next}
                   // 15d. next --> deze prop accepteert een functie die aangeroepen zal worden om de
                   // volgende pagina met resultaten weer te geven, indien hasMore = true
+                  // Voor stap 15e. ga naar utils>utils.js
+                  
                   // 15i. fetchMoreData(posts, setPosts)
                   next={() => {fetchMoreData(posts, setPosts)}}
-                  // Voor stap 15e. ga naar utils>utils.js
                 />
               ) : (
                 // // 13id. NEE, dan geef de NoResults image weer met de bijbehorende melding

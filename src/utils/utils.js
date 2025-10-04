@@ -18,11 +18,11 @@ export const fetchMoreData = async (resource, setResource) => {
       results: data.results.reduce((acc, cur) => {
         // 15h. Terwijl we posts uit volgende pagina's worden opgehaald, zullen de gebruikers ongetwijfeld
         // nieuwe posts aanmaken of bestaande verwijderen, waardoor reeds weergegeven posts in volgende pagina's 
-        // eindigen. Om te voorkomen dat we reeds opgehaalde/weergegeven posts aan de huidige results-array 
+        // eindigen. Om te voorkomen dat er oude posts aan de huidige results-array 
         // worden toegevoegd (wat tot dubbele waarden zou leiden), moeten we de al aanwezige posts uitfilteren.
         // Dit doen we d.m.v. de .some-methode
 
-        // 15ha. Hierbij itereren we door accResult (huidige array van opgehaalde posts) en checken we voor iedere post
+        // 15ha. Hierbij itereren we door accResult (huidige array van opgehaalde posts) en checken we voor iedere post of
         // zijn id gelijk is aan die van de nieuw opgehaalde post.
         // JA? ---> dan retourneren we acc (de huidige posts-array) zonder de nieuwe post toe te voegen (want zou er dubbel in komen te staan)
         // NEE? ---> de nieuw opgehaalde post is nog niet aanwezig en mag wel toegevoegd worden.

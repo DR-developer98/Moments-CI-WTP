@@ -3,9 +3,10 @@ import React from "react";
 import styles from "../../styles/Post.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media } from "react-bootstrap";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Avatar from "../../components/Avatar";
 import { axiosRes } from "../../api/axiosDefault";
+import { MoreDropdown } from "../../components/MoreDropdown";
 
 const Post = (props) => {
   // 10b. Hier destructureren we de props (...post.results[0])
@@ -35,6 +36,29 @@ const Post = (props) => {
   // 10c. De ingelogde gebruiker kan niet zijn eigen posts liken
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
+
+  // 16g. Voor de Post-edit functie moeten we de gebruiker naar /posts/:id/edit doorsturen
+  // Hiertoe hebben we de useHistory hook nodig.
+  const history = useHistory();
+
+  // 16h. Functie voor het behandelen van de edit functie 
+  const handleEdit = () => {
+    // 16ha. d.m.v. history.push("NEW PATHNAME") sturen we de gebruiker door naar /posts/:id/edit
+    // de handleEdit functie geven we dan door als prop.
+    // 16i. {is_owner && postPage && <MoreDropdown handleEdit={handleEdit}/>}
+    // Voor stap 16j. kijk weer in MoreDropdown.js
+    history.push(`/posts/${id}/edit`)
+  }
+
+  // 16l. handleDelete-functie
+  const handleDelete = async () => {
+    try {
+      await axiosRes.delete(`/posts/${id}/`);
+      history.goBack();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   // 11. handleLike event handler | LIKE
   const handleLike = async () => {
@@ -96,7 +120,7 @@ const Post = (props) => {
             >
               {updated_at}
             </span>
-            {is_owner && postPage && "..."}
+            {is_owner && postPage && <MoreDropdown handleEdit={handleEdit} handleDelete={handleDelete}/>}
           </div>
         </Media>
       </Card.Body>
