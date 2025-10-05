@@ -74,7 +74,13 @@ function PostsPage({ message, filter = "" }) {
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
-        <p>Popular profiles mobile</p>
+        <PopularProfiles 
+        // 20. We voegen de PopularProfiles-component ook op deze plek toe
+        // om de weergave en de situering op de pagina ervan te differentiëren
+        // tussen Desktop en mobiel. 
+        // Voor stap 20a. kijk in PopularProfiles.js
+        mobile 
+        />
         <i className={`fas fa-search ${styles.SearchIcon}`}></i>
         <Form
           // 14. SEARCH BAR. Voor stap 14a. ga naar query, setQuery ↑↑↑
@@ -102,8 +108,8 @@ function PostsPage({ message, filter = "" }) {
             <>
               {posts.results.length ? ( // // 13ib. JA! dan laten we erdoorheen mappen (om ze een voor een weer te geven)
                 <InfiniteScroll
-                // 15. InfiniteScroll (geïmporteerd uit react-bootstrap). Die neemt een children-prop
-                // waarin we de component invoegen, waar we die infinite scroll op toe willen passen
+                  // 15. InfiniteScroll (geïmporteerd uit react-bootstrap). Die neemt een children-prop
+                  // waarin we de component invoegen, waar we die infinite scroll op toe willen passen
                   children={posts.results.map((post) => {
                     <Post
                       key={post.id}
@@ -120,7 +126,7 @@ function PostsPage({ message, filter = "" }) {
                   loader={<Asset spinner />}
                   // 15ca. hasMore --> in onze API zien we dat de posts een "next"-key hebben, die
                   // aangeeft of er volgende pagina's aan posts bestaan. Deze is of "true" of "false".
-                  // Wanneer de laatste pagina is bereikt, dan staat ie gelijk aan false. 
+                  // Wanneer de laatste pagina is bereikt, dan staat ie gelijk aan false.
                   // We gebruiken hierbij een double NOT operator !!posts.next
                   // De functie van de double NOT operator is om expliciete checks uit te voeren
                   // of een zuivere Boolean-waarde terug te koppelen
@@ -128,9 +134,11 @@ function PostsPage({ message, filter = "" }) {
                   // 15d. next --> deze prop accepteert een functie die aangeroepen zal worden om de
                   // volgende pagina met resultaten weer te geven, indien hasMore = true
                   // Voor stap 15e. ga naar utils>utils.js
-                  
+
                   // 15i. fetchMoreData(posts, setPosts)
-                  next={() => {fetchMoreData(posts, setPosts)}}
+                  next={() => {
+                    fetchMoreData(posts, setPosts);
+                  }}
                 />
               ) : (
                 // // 13id. NEE, dan geef de NoResults image weer met de bijbehorende melding
@@ -148,7 +156,7 @@ function PostsPage({ message, filter = "" }) {
         }
       </Col>
       <Col md={4} className="d-none d-lg-block p-0 p-lg-2">
-        <PopularProfiles/>
+        <PopularProfiles />
       </Col>
     </Row>
   );

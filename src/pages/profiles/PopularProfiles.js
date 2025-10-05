@@ -5,7 +5,9 @@ import { axiosReq } from "../../api/axiosDefault";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import Asset from "../../components/Asset";
 
-const PopularProfiles = () => {
+// 20a. We destructureren de mobile-prop direct tussen haakjes
+// voor stap 20b. kijk net boven het return-statement
+const PopularProfiles = ({ mobile }) => {
   const [profileData, setProfileData] = useState({
     // 19. We zetten beide keys op dezelfde waarde,
     // omdat we voor latere stappen het nodig hebben, dat
@@ -50,20 +52,35 @@ const PopularProfiles = () => {
   }, [currentUser]);
 
   return (
-    <Container className={appStyles.Content}>
-      {// 19g. Indien popularProfiles > 0, dan worden de profielen weergegeven.
-      // Indien nee, dan wordt er een Spinner weergegeven
-      popularProfiles.results.length ? (
-        <>
-          <p>Most popular profiles</p>
-          {popularProfiles.results.map((profile) => {
-            // 19f. We itereren door de profielen om ze allemaal weer te geven
-            <p key={profile.id}>{profile.owner}</p>;
-          })}
-        </>
-      ) : (
-        <Asset spinner />
-      )}
+    // 20b. ${mobile && 'd-lg-none text-center mb-3'}
+    // Indien "mobile" true (d.w.z doorgegeven als prop), dan voeg 'd-lg-none text-center mb-3'
+    // als klasses toe.
+    // Voor stap 20c. Kijk hieronder (ternarny conditional met mobile ? () : ())
+    <Container className={`${appStyles.Content} ${mobile && 'd-lg-none text-center mb-3'}`}>
+      {
+        // 19g. Indien popularProfiles > 0, dan worden de profielen weergegeven.
+        // Indien nee, dan wordt er een Spinner weergegeven
+        popularProfiles.results.length ? (
+          <>
+            <p>Most popular profiles</p>
+            {mobile ? (// 20c. mobile aanwezig als prop ---> JA? dan maximaal 4 profielen (.slice(0,4)) 
+            // naast elkaar (d-flex justify-content-around) weergeven
+                <div className="d-flex justify-content-around">
+                    {popularProfiles.results.slice(0,4).map((profile) => {
+                        <p key={profile.id}>{profile.owner}</p>;
+                    })}
+                </div>
+            ) : ( // 20ca. NEE? Dan reguliere profielenweergave (10 items onder elkaar)
+            popularProfiles.results.map((profile) => {
+              // 19f. We itereren door de profielen om ze allemaal weer te geven
+              <p key={profile.id}>{profile.owner}</p>;
+            })
+            ) }
+          </>
+        ) : (
+          <Asset spinner />
+        )
+      }
     </Container>
   );
 };
