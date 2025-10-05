@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap";
 import { axiosReq } from "../../api/axiosDefault";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import Asset from "../../components/Asset";
+import Profile from "./Profile";
 
 // 20a. We destructureren de mobile-prop direct tussen haakjes
 // voor stap 20b. kijk net boven het return-statement
@@ -67,13 +68,13 @@ const PopularProfiles = ({ mobile }) => {
             // naast elkaar (d-flex justify-content-around) weergeven
                 <div className="d-flex justify-content-around">
                     {popularProfiles.results.slice(0,4).map((profile) => {
-                        <p key={profile.id}>{profile.owner}</p>;
+                        <Profile key={profile.id} profile={profile} mobile/>
                     })}
                 </div>
             ) : ( // 20ca. NEE? Dan reguliere profielenweergave (10 items onder elkaar)
             popularProfiles.results.map((profile) => {
               // 19f. We itereren door de profielen om ze allemaal weer te geven
-              <p key={profile.id}>{profile.owner}</p>;
+              <Profile key={profile.id} profile={profile}/>
             })
             ) }
           </>
