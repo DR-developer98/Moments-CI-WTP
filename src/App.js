@@ -14,6 +14,7 @@ import PostPage from "./pages/posts/PostPage";
 import PostsPage from "./pages/posts/PostsPage";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
 import PostEditForm from "./pages/posts/PostEditForm";
+import ProfilePage from "./pages/profiles/ProfilePage";
 // import { createContext, useEffect, useState } from "react";
 // import axios from 'axios';
 
@@ -115,7 +116,8 @@ function App() {
           <Route exact 
           // 17. :id in de url, deze kunnen we uit de url ophalen d.m.v. de useParams() hook
           // kijk in PostEditForm.js voor stap 17a.
-          path="posts/:id/edit" render={() => <PostEditForm />}/>
+          path="/posts/:id/edit" render={() => <PostEditForm />}/>
+          <Route exact path="/profiles/:id" render={() => <ProfilePage />} />
           <Route render={() => <p>Page not found!</p>} />
         </Switch>
       </Container>
