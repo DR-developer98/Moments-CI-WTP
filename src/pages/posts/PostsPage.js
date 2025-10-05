@@ -74,12 +74,12 @@ function PostsPage({ message, filter = "" }) {
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
-        <PopularProfiles 
-        // 20. We voegen de PopularProfiles-component ook op deze plek toe
-        // om de weergave en de situering op de pagina ervan te differentiëren
-        // tussen Desktop en mobiel. 
-        // Voor stap 20a. kijk in PopularProfiles.js
-        mobile 
+        <PopularProfiles
+          // 20. We voegen de PopularProfiles-component ook op deze plek toe
+          // om de weergave en de situering op de pagina ervan te differentiëren
+          // tussen Desktop en mobiel.
+          // Voor stap 20a. kijk in PopularProfiles.js
+          mobile
         />
         <i className={`fas fa-search ${styles.SearchIcon}`}></i>
         <Form

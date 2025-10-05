@@ -17,6 +17,9 @@ import {
   useProfiledata,
   useSetProfileData,
 } from "../../contexts/ProfileDataContext";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Post from "../posts/Post";
+import NoResults from "../../assets/no-results.png";
 
 function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -35,22 +38,26 @@ function ProfilePage() {
   // ook de eigenaar van het weergegeven profiel is.
   // Zoek de "follow button" <p> op in het return-statement voor stap 22m.
   const is_owner = currentUser?.username === profile?.owner;
+  const [profilePosts, setProfilePosts] = useState({ results: [] });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // 22a. {data: pageProfile} ---> we deconstructureren de data en geven we hem
         // de betekenisvollere naam "comments". Voor stap 18b. kijk onder setPost
-        const [{ data: pageProfile }] = await Promise.all([
-          axiosReq.get(`/profiles/${id}/`),
-          // 22b. Als alles goed gaat moeten we pageProfile updaten
-          // Hiervoor hebben we de useSetProfileData Context hook nodig
-          // zie stap 22c. onder "const {id} = useParams()"
-          setProfileData((prevData) => ({
-            ...prevData,
-            pageProfile: { results: [pageProfile] },
-          })),
-        ]);
+        const [{ data: pageProfile }, { data: profilePosts }] =
+          await Promise.all([
+            axiosReq.get(`/profiles/${id}/`),
+            axiosReq.get(`/profiles/?owner__profile=${id}`),
+            // 22b. Als alles goed gaat moeten we pageProfile updaten
+            // Hiervoor hebben we de useSetProfileData Context hook nodig
+            // zie stap 22c. onder "const {id} = useParams()"
+            setProfileData((prevData) => ({
+              ...prevData,
+              pageProfile: { results: [pageProfile] },
+            })),
+          ]);
+        setProfilePosts(profilePosts);
         // 22d. We hebben a.d.h.v. de id het profiel opgehaald
         // d.m.v. setProfileData hebben we pageProfile geüpdatet
         // hasLoaded moet nu op true gezet worden, zodat de spinner verdwijnt
@@ -154,8 +161,26 @@ function ProfilePage() {
   const mainProfilePosts = (
     <>
       <hr />
-      <p className="text-center">Profile owner's posts</p>
+      <p className="text-center">{profile?.owner}'s posts</p>
       <hr />
+      {profilePosts.results.length ? (
+        <InfiniteScroll
+          children={profilePosts.results.map((post) => {
+            <Post key={post.id} {...post} setPosts={setProfilePosts} />;
+          })}
+          dataLength={profilePosts.results.length}
+          loader={<Asset spinner />}
+          hasMore={!!profilePosts.next}
+          next={() => {
+            fetchMoreData(profilePosts, setProfilePosts);
+          }}
+        />
+      ) : (
+        <Asset
+          src={NoResults}
+          message={`No results found, ${profile?.owner} hasn't posted yet.`}
+        />
+      )}
     </>
   );
 
