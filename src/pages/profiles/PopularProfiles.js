@@ -11,6 +11,7 @@ import { useProfiledata } from "../../contexts/ProfileDataContext";
 // voor stap 20b. kijk net boven het return-statement
 const PopularProfiles = ({ mobile }) => {
   // 22. Vervanging van de uitgecommentarieerde code door ProfileDataProvider
+  // Voor stap 23. kijk in ProfileDataContext.js
   const { popularProfiles } = useProfiledata();
 
   // const [profileData, setProfileData] = useState({

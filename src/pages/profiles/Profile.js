@@ -3,6 +3,7 @@ import styles from "../../styles/Profile.module.css";
 import buttonStyles from "../../styles/Button.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Button } from "react-bootstrap";
+import { useSetProfileData } from "../../contexts/ProfileDataContext";
 
 // 21. Zie PopularProfiles.js voor de doorgegeven props (mobile, profile en key)
 const Profile = (props) => {
@@ -15,6 +16,11 @@ const Profile = (props) => {
   const currentUser = useCurrentUser();
   // 21d. en ook of zijn username gelijk is aan de naam van de eigenaar van het profiel
   const is_owner = currentUser?.username === owner;
+
+  // 23d. handleFollow functie gedestructureerd m.g.v. 
+  // de useSetProfileData context hook.
+  // Voor stap 23e. bij de Follow-button beneden
+  const {handleFollow} = useSetProfileData();
 
   return (
     // 21e. WordBreak is ervoor bedoeld om te voorkomen dat dingen heel erg
@@ -49,7 +55,11 @@ const Profile = (props) => {
             ) : (
               <Button
                 className={`${buttonStyles.Button} ${buttonStyles.Black}`}
-                onClick={() => {}}
+                // 23e. handleFollow in de event handler
+                // met "profile" als argument. Dit profile
+                // is het profiel, dat de gebruiker zojuist heeft aangeklikt
+                // Voor stap 23f. ga naar handleFollow in ProfileDataContext.js
+                onClick={() => handleFollow(profile)}
               >
                 follow
               </Button>

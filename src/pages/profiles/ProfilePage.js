@@ -28,7 +28,9 @@ function ProfilePage() {
   const { id } = useParams();
   // 22c. setProfileData Context Hook geïmporteerd
   // voor stap 22d. kijk weer beneden in het try-gedeelte van het statement
-  const setProfileData = useSetProfileData();
+  // 23b. handleFollow destructureren we samen met setProfileData 
+  // voor stap 23c. kijk bij de Follow-button beneden
+  const {setProfileData, handleFollow} = useSetProfileData();
   // 22f. destructurering van het pageProfile-object
   const { pageProfile } = useProfiledata();
   // 22g. destructurering van het enkele profiel-object
@@ -139,7 +141,9 @@ function ProfilePage() {
                 ) : (
                   <Button
                     className={`${btnStyles.Button} ${btnStyles.Black}`}
-                    onClick={() => {}}
+                    // 23c. handleFollow functie bij de event handler
+                    // voor stap 23d. kijk bij Profile.js
+                    onClick={() => handleFollow(profile)}
                   >
                     follow
                   </Button>
