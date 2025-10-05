@@ -12,6 +12,9 @@ import Post from "./Post";
 import CommentCreateForm from "../comments/CommentCreateForm";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import Comment from "../comments/Comment";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Asset from "../../components/Asset";
+import { fetchMoreData } from "../../utils/utils";
 
 function PostPage() {
   // 9a. We gaan nu de gegevens van de beoogde post ophalen
@@ -36,9 +39,9 @@ function PostPage() {
         // Wij halen een generieke "data" op, maar het heeft voor ons meer betekenis
         // met de naam "post"
 
-        // 18a. {data: comments} ---> we deconstructureren de data en geven we hem 
+        // 18a. {data: comments} ---> we deconstructureren de data en geven we hem
         // de betekenisvollere naam "comments". Voor stap 18b. kijk onder setPost
-        const [{ data: post }, {data: comments}] = await Promise.all([
+        const [{ data: post }, { data: comments }] = await Promise.all([
           // 9d. een Promise is de "belofte" van een waarde/result-object.
           // Alle promises moeten "resolved" worden, d.w.z. waarkomen.
           // Indien deze waarkomen/nagekomen worden, dan gebruiken we de
@@ -50,7 +53,7 @@ function PostPage() {
           axiosReq.get(`/posts/${id}`),
           // 18. Request voor het ophalen van de comments
           // voor stap 18a. zie hierboven const [...] = await Promis [...]
-          axiosReq.get(`/comments/?post=${id}`)
+          axiosReq.get(`/comments/?post=${id}`),
         ]);
         // 9da. D.m.v. de setPost functie zetten we post op {results: [post]}
         setPost({ results: [post] });
@@ -93,23 +96,35 @@ function PostPage() {
               setComments={setComments}
             />
           ) : comments.results.length ? (
-            "Comments"
+            <InfiniteScroll
+            dataLength={comments.results.length}
+            loader={<Asset spinner/>}
+            hasMore={!!comments.next}
+            next={() => {fetchMoreData(comments, setComments)}}
+            >
+              {
+                // 18c. Zijn er comments?
+                comments.results.length ? ( // JA! Dan geef de comments weer
+                  comments.results.map((comment) => {
+                    // 18d. we spreiden het comment-object uit d.m.v. {...comment}
+                    // zodat zijn content als props doorgegeven wordt
+                    // voor stap 18e. kijk in Comment.js
+                    <Comment
+                      key={comment.id}
+                      {...comment}
+                      setPost={setPost}
+                      setComments={setComments}
+                    />;
+                  })
+                ) : currentUser ? ( // NEE! Is de gebruiker ingelogd? // // JA! Dan geef onderstaande melding weer
+                  <span>No comments yet, be the first to comment!</span>
+                ) : (
+                  // // NEE! Dan geef onderstaande melding weer
+                  <span>No comments... yet!</span>
+                )
+              }
+            </InfiniteScroll>
           ) : null}
-
-          {// 18c. Zijn er comments?
-          comments.results.length ? ( // JA! Dan geef de comments weer
-            comments.results.map(comment => {
-              // 18d. we spreiden het comment-object uit d.m.v. {...comment}
-              // zodat zijn content als props doorgegeven wordt
-              // voor stap 18e. kijk in Comment.js
-              <Comment key={comment.id} {...comment} setPost={setPost} setComments={setComments}/>
-            })
-          ) : currentUser ? ( // NEE! Is de gebruiker ingelogd? // // JA! Dan geef onderstaande melding weer
-            <span>No comments yet, be the first to comment!</span>
-          ) : ( // // NEE! Dan geef onderstaande melding weer
-            <span>No comments... yet!</span>
-          ) }
-
         </Container>
       </Col>
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
