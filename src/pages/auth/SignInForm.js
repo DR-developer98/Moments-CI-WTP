@@ -18,12 +18,19 @@ import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
 // 3c. import { SetCurrentUserContext } from "../../App";
 import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
+import { useRedirect } from "../../hooks/useRedirect";
 
 function SignInForm() {
   // 3c. ↓↓↓ Zie App.js, hier slaan we de SetCurrentUserContext op in een variabel
   // const setCurrentUser = useContext(SetCurrentUserContext);
   // 3i. ↓↓↓ We updaten bovenstaande variabel 
   const setCurrentUser = useSetCurrentUser()
+  // 24h. We importeren de useRedirect-hook
+  // om de ingelogde gebruiker weg te houden
+  // bij deze pagina als ze toch al ingelogd zijn
+  // Voor stap 24i. ga naar histoy.goBack in handleSubmit
+  useRedirect("loggedIn")
+
   const [signInData, setSignInData] = useState({
     username: "",
     password: "",
@@ -42,7 +49,12 @@ function SignInForm() {
       // 3e. We zetten de waarde van currentUser op data.user (opgehaald uit de API)
       setCurrentUser(data.user)
       // Daarna sturen we de gebruiker door naar de homepagina ("/")
-      history.push("/");
+      // history.push("/");
+
+      // 24i. We sturen de gebruiker terug naar de laatste pagina die hij bekeek 
+      // voordat hij opnieuw in moest loggen.
+      // Voor stap 24j. ga naar SignUpform.js
+      history.goBack();
     } catch (err) {
         // Is de response gedefinieerd?
         // Zo ja, dan pas gaan we op zoek naar de data

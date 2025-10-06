@@ -20,8 +20,14 @@ import btnStyles from "../../styles/Button.module.css";
 import { FormFile } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import { useHistory } from "react-router";
+import { useRedirect } from "../../hooks/useRedirect";
 
 function PostCreateForm() {
+  // 24k. We willen voorkomen dat een gebruiker een Post kan aanmaken
+  // als hij niet ingelogd is. Als hij de url voor het creëren 
+  // van een post op zou zoeken, dan zou hij teruggestuurd moeten
+  // worden naar de homepage
+  useRedirect("loggedOut");
   const [errors, setErrors] = useState({});
   // 7e. we definiëren postData en setPostData, vergelijkbaar met hoe
   // we dit bij de eerder gemaakte formulieren hebben we gedaan

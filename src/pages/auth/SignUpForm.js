@@ -14,8 +14,12 @@ import {
   Container,
   Alert,
 } from "react-bootstrap";
+import { useRedirect } from "../../hooks/useRedirect";
 
 const SignUpForm = () => {
+  // 24j.
+  // Voor stap 24k. ga naar PostCreateForm.js
+  useRedirect("loggedIn");
   // Ter herinneringç met de hook useState
   // bepalen we de default waarde van - in dit geval - signUpData
   // De default waarde is gelijk aan een object met drie keys,
