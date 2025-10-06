@@ -37,7 +37,7 @@ export const fetchMoreData = async (resource, setResource) => {
 };
 
 // 23g. followHeper-functie
-export const followHelper = ({profile, clickedProfile, following_id}) => {
+export const followHelper = ({ profile, clickedProfile, following_id }) => {
   return profile.id === clickedProfile.id
     ? // Dit is het profiel dat ik aangeklikt heb
       // update zijn volgerstal en zet zijn following_id
@@ -46,9 +46,9 @@ export const followHelper = ({profile, clickedProfile, following_id}) => {
         followers_count: profile.followers_count + 1,
         // 23ga. we geven following_id door als prop
         // en data.id is in ProfileDataContext als prop
-        // van followHelper doorgegeven, 
+        // van followHelper doorgegeven,
         // daarom hebben we geen following_id: data.id nodig.
-        // folliwng_id is voldoende
+        // following_id is voldoende
         // Voor stap 23h. ga terug naar ProfileDataContext.js
         following_id,
       }
@@ -60,4 +60,16 @@ export const followHelper = ({profile, clickedProfile, following_id}) => {
       // het profiel dat de ingelogde gebruiker heeft aangeklikt,
       // dus retourneer het onveranderd
       profile;
+};
+
+export const unfollowHelper = ({ profile, clickedProfile }) => {
+  return profile.id === clickedProfile.id
+    ? {
+        ...profile,
+        followers_count: profile.followers_count - 1,
+        following_id: null
+      }
+    : profile.is_owner
+    ? { ...profile, following_count: profile.following_count - 1 }
+    : profile;
 };

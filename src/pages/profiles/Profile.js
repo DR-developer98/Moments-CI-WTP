@@ -20,7 +20,7 @@ const Profile = (props) => {
   // 23d. handleFollow functie gedestructureerd m.g.v. 
   // de useSetProfileData context hook.
   // Voor stap 23e. bij de Follow-button beneden
-  const {handleFollow} = useSetProfileData();
+  const {handleFollow, handleUnfollow} = useSetProfileData();
 
   return (
     // 21e. WordBreak is ervoor bedoeld om te voorkomen dat dingen heel erg
@@ -48,7 +48,7 @@ const Profile = (props) => {
             following_id ? (
               <Button
                 className={`${buttonStyles.Button} ${buttonStyles.BlackOutline}`}
-                onClick={() => {}}
+                onClick={() => {handleUnfollow(profile)}}
               >
                 unfollow
               </Button>

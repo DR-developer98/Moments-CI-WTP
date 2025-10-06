@@ -30,7 +30,7 @@ function ProfilePage() {
   // voor stap 22d. kijk weer beneden in het try-gedeelte van het statement
   // 23b. handleFollow destructureren we samen met setProfileData 
   // voor stap 23c. kijk bij de Follow-button beneden
-  const {setProfileData, handleFollow} = useSetProfileData();
+  const {setProfileData, handleFollow, handleUnfollow} = useSetProfileData();
   // 22f. destructurering van het pageProfile-object
   const { pageProfile } = useProfiledata();
   // 22g. destructurering van het enkele profiel-object
@@ -134,7 +134,7 @@ function ProfilePage() {
                 profile?.following_id ? (
                   <Button
                     className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
-                    onClick={() => {}}
+                    onClick={() => {handleUnfollow(profile)}}
                   >
                     unfollow
                   </Button>
